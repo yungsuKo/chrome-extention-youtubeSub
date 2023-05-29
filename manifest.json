@@ -1,0 +1,19 @@
+{
+    "name": "My Extension",
+    "description": "A nice little demo extension.",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "permissions": ["storage", "tabs", "activeTab", "scripting"]
+}
