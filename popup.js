@@ -56,3 +56,5 @@ getTitleBtn.addEventListener("click", async function () {
 //         document.body.style.backgroundColor = color;
 //     });
 // }
+
+// 백그라운드에서 크롬 익스텐션을 돌릴 수 있나
