@@ -19,8 +19,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === "getData") {
-        let data = document.querySelector("body").innerText; // 웹페이지에서 데이터를 가져오는 코드
-        console.log(data);
-        sendResponse({ data: "aaaaaa" });
+        let sellAmount7Day = 0;
+        let data = document.querySelectorAll(
+            "#INTRODUCE > div > div.R_sjsDSRfc > div._2Y8Oh-KkFd > div._3uR_9UaARA > ul > li:nth-child(n) > em > strong"
+        ); // 웹페이지에서 데이터를 가져오는 코드
+        data.forEach((i) => {
+            console.log(i.innerText.replace("건", ""));
+            sellAmount7Day += parseInt(i.innerText.replace("건", ""));
+        });
+        console.log(sellAmount7Day);
+        sendResponse({ data: sellAmount7Day });
     }
 });

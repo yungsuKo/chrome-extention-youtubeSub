@@ -39,7 +39,8 @@ sendEventBtn.addEventListener("click", async function () {
             tabs[0].id,
             { action: "getData" },
             (response) => {
-                document.getElementById("target12").textContent = response.data; // 웹페이지로부터 받은 데이터를 출력
+                document.getElementById("target12").textContent =
+                    response?.data; // 웹페이지로부터 받은 데이터를 출력
             }
         );
     });
