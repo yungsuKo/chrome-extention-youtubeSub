@@ -1,6 +1,7 @@
 // DOM이 로드된 후에 실행될 코드
 let changeColor = document.getElementById("changeColor");
 let getTitleBtn = document.getElementById("getTitle");
+let sendEventBtn = document.getElementById("sendEvent");
 
 changeColor.addEventListener("click", async () => {
     let [tab] = await chrome.tabs.query({
@@ -28,33 +29,18 @@ getTitleBtn.addEventListener("click", async function () {
     });
 });
 
-// async function getTitle() {
-//     console.log(document.title);
-//     chrome.runtime.sendMessage({ title: document.title });
-// }
-
-// chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-//     document.getElementById("target12").textContent = "message.title";
+// sendEventBtn.addEventListener("click", async function () {
+//     chrome.runtime.sendMessage({ greeting: "hello" });
 // });
-
-// getTitle.addEventListener("click", async function () {
-//     let [tab] = await chrome.tabs.query({
-//         active: true,
-//         currentWindow: true,
-//     });
-//     title = document.title;
-//     console.log(title);
-//     chrome.scripting.executeScript({
-//         target: { tabId: tab.id },
-//         function: setTitle(title),
-//     });
-// });
-
-// async function setTitle(title) {
-//     console.log(title);
-//     chrome.storage.sync.get("color", ({ color }) => {
-//         document.body.style.backgroundColor = color;
-//     });
-// }
-
-// 백그라운드에서 크롬 익스텐션을 돌릴 수 있나
+sendEventBtn.addEventListener("click", async function () {
+    console.log("response");
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(
+            tabs[0].id,
+            { action: "getData" },
+            (response) => {
+                document.getElementById("target12").textContent = response.data; // 웹페이지로부터 받은 데이터를 출력
+            }
+        );
+    });
+});

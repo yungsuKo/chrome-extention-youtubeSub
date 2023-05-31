@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // 'request.data' contains the data from the content script
-    console.log(request.title);
+    console.log(request);
     sendMessage = request.title;
     chrome.storage.sync.set({ sendMessage });
     // TODO: Display this data in your extension's UI
