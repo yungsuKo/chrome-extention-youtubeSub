@@ -33,10 +33,14 @@ getTitleBtn.addEventListener("click", async function () {
 //     chrome.runtime.sendMessage({ greeting: "hello" });
 // });
 sendEventBtn.addEventListener("click", async function () {
-    chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-        const response = await chrome.tabs.sendMessage(tabs[0].id, {
-            action: "getData",
-        });
-        console.log(response);
+    console.log("response");
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(
+            tabs[0].id,
+            { action: "getData" },
+            (response) => {
+                document.getElementById("target12").textContent = response.data; // 웹페이지로부터 받은 데이터를 출력
+            }
+        );
     });
 });
