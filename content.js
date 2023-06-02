@@ -12,12 +12,6 @@ function doSomethingAsync() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.greeting == "hello") {
-        sendResponse({ farewell: "goodbye" });
-    }
-});
-
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === "getData") {
         let sellAmount7Day = 0;
         let data = document.querySelectorAll(
