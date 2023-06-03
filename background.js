@@ -33,6 +33,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 sendResponse({ result: deliverySum });
             });
         return true;
+        // 이거 붙여줘야 하는 이유 서치해보기
     }
 
     // TODO: Display this data in your extension's UI
