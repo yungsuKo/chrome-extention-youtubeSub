@@ -23,5 +23,20 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         });
         console.log(sellAmount7Day);
         sendResponse({ data: sellAmount7Day });
+    } else if (request.action === "getYoutubeData") {
+        // ... 버튼을 클릭하고 pop-over 메뉴가 열림
+        // 거기서 배열로 받아서 "스크립트 표시"가 적혀있는 메뉴를 클릭한다.
+        document
+            .querySelector(
+                "#button-shape > button > yt-touch-feedback-shape > div"
+            )
+            .click();
+        setTimeout(() => {
+            document
+                .querySelector(
+                    "#items > ytd-menu-service-item-renderer:nth-child(6) > tp-yt-paper-item"
+                )
+                .click();
+        }, 500);
     }
 });
