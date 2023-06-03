@@ -7,36 +7,111 @@ chrome.runtime.sendMessage({ title: document.title });
 //     );
 //     menuOpenBtn.click();
 // });
-function doSomethingAsync() {
-    return "aaaa";
-}
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.action === "getData") {
-        let sellAmount7Day = 0;
-        let data = document.querySelectorAll(
-            "#INTRODUCE > div > div.R_sjsDSRfc > div._2Y8Oh-KkFd > div._3uR_9UaARA > ul > li:nth-child(n) > em > strong"
-        ); // 웹페이지에서 데이터를 가져오는 코드
-        data.forEach((i) => {
-            console.log(i.innerText.replace("건", ""));
-            sellAmount7Day += parseInt(i.innerText.replace("건", ""));
-        });
-        console.log(sellAmount7Day);
-        sendResponse({ data: sellAmount7Day });
-    } else if (request.action === "getYoutubeData") {
-        // ... 버튼을 클릭하고 pop-over 메뉴가 열림
+    if (request.action === "getYoutubeData") {
+        // 1. ... 버튼을 클릭하고 pop-over 메뉴가 열림
         // 거기서 배열로 받아서 "스크립트 표시"가 적혀있는 메뉴를 클릭한다.
+        let scripts;
         document
             .querySelector(
                 "#button-shape > button > yt-touch-feedback-shape > div"
             )
             .click();
-        setTimeout(() => {
-            document
-                .querySelector(
-                    "#items > ytd-menu-service-item-renderer:nth-child(6) > tp-yt-paper-item"
-                )
-                .click();
-        }, 500);
+        // 2. 현재는 settimeout을 통해서 동적 웹에서 데이터가 추가된 것을 감지하고 데이터를 불러오는데,
+        // 이 부분을 수정해서 데이터가 추가되면 바로 데이터를 불러오도록 수정해야함.
+
+        // ============= 강제로 setTimeout을 두어 작동하도록 한 방법 =============
+        // setTimeout(() => {
+        //     const menuList = document.querySelectorAll(
+        //         "#items > ytd-menu-service-item-renderer:nth-child(n)"
+        //     );
+        //     menuList.forEach((i) => {
+        //         if (i.innerText === "스크립트 표시") {
+        //             i.click();
+        //         }
+        //     });
+        // }, 500);
+
+        // 메뉴 정상적으로 열렸는지 여부 확인 및 최종적으로 스크립트 표시 메뉴 클릭
+        var targetNodeMenu = document.querySelector(
+            "body > ytd-app > ytd-popup-container"
+        );
+        var config = { attributes: true, childList: true, subtree: true };
+        var observerMenu = new MutationObserver(function (
+            mutationsList,
+            observer
+        ) {
+            for (let mutation of mutationsList) {
+                // 만약 추가된 노드가 있으면
+                if (
+                    mutation.type === "childList" &&
+                    mutation.addedNodes.length > 0
+                ) {
+                    // 추가된 노드 각각에 대해
+                    mutation.addedNodes.forEach((node) => {
+                        // 원하는 요소인지 확인
+                        if (
+                            node.matches &&
+                            node.matches(".ytd-menu-service-item-renderer") &&
+                            node.innerText === "스크립트 표시"
+                        ) {
+                            node.click();
+                            observer.disconnect();
+                        }
+                    });
+                }
+            }
+        });
+        observerMenu.observe(targetNodeMenu, config);
+
+        // ============= 강제로 setTimeout을 두어 작동하도록 한 방법 =============
+        // setTimeout(() => {
+        //     let fullScript;
+        //     scripts = document.querySelectorAll(
+        //         "#segments-container > ytd-transcript-segment-renderer:nth-child(n) > div > yt-formatted-string"
+        //     );
+        //     console.log(scripts);
+        //     scripts.forEach((i) => {
+        //         fullScript = fullScript + " " + i.innerText;
+        //     });
+        //     sendResponse({ data: fullScript });
+        // }, 2000);
+
+        // 스크립트 창이 정상적으로 열렸는지 여부 확인 및 최종적으로 스크립트 표시 메뉴 클릭
+        var targetNodeScript = document.getElementById("panels");
+        var observerScript = new MutationObserver(function (
+            mutationsList,
+            observer
+        ) {
+            for (let mutation of mutationsList) {
+                // 만약 추가된 노드가 있으면
+                if (
+                    mutation.type === "childList" &&
+                    mutation.addedNodes.length > 0
+                ) {
+                    // 추가된 노드 각각에 대해
+                    mutation.addedNodes.forEach((node) => {
+                        // 원하는 요소인지 확인
+                        if (
+                            node.matches &&
+                            node.matches(".ytd-transcript-segment-renderer")
+                        ) {
+                            let fullScript;
+                            scripts = document.querySelectorAll(
+                                "#segments-container > ytd-transcript-segment-renderer:nth-child(n) > div > yt-formatted-string"
+                            );
+                            scripts.forEach((i) => {
+                                fullScript = fullScript + " " + i.innerText;
+                            });
+                            sendResponse({ data: fullScript });
+                            observer.disconnect();
+                        }
+                    });
+                }
+            }
+        });
+        observerScript.observe(targetNodeScript, config);
+        return true;
     }
 });
