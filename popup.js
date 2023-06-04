@@ -17,7 +17,7 @@ let copyBtn = document.getElementById("copyBtn");
 //             tabs[0].id,
 //             { action: "getData" },
 //             (response) => {
-//                 document.getElementById("target12").textContent =
+//                 document.getElementById("script").textContent =
 //                     response?.data; // 웹페이지로부터 받은 데이터를 출력
 //             }
 //         );
@@ -32,16 +32,14 @@ youtubeBtn.addEventListener("click", async function () {
             tabs[0].id,
             { action: "getYoutubeData" },
             (response) => {
-                document.getElementById("target12").textContent =
-                    response?.data; // 웹페이지로부터 받은 데이터를 출력
-                document.querySelector("body").append("hello");
+                document.getElementById("script").textContent = response?.data; // 웹페이지로부터 받은 데이터를 출력
             }
         );
     });
 });
 
 copyBtn.addEventListener("click", async function () {
-    var copyInput = document.getElementById("target12");
+    var copyInput = document.getElementById("script");
     try {
         await navigator.clipboard.writeText(copyInput.innerText);
         alert("텍스트가 복사되었습니다");
