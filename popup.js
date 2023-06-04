@@ -1,21 +1,9 @@
 // DOM이 로드된 후에 실행될 코드
-let getTitleBtn = document.getElementById("getTitle");
-let sendEventBtn = document.getElementById("sendEvent");
+
 let youtubeBtn = document.getElementById("youtubeEvent");
+let copyBtn = document.getElementById("copyBtn");
 // 이 함수의 본문은 컨텐츠 스크립트로 실행됩니다.
 // 현재 페이지
-async function setPageBackgroundColor() {
-    chrome.storage.sync.get("color", ({ color }) => {
-        document.body.style.backgroundColor = color;
-    });
-}
-
-getTitleBtn.addEventListener("click", async function () {
-    window.onload;
-    chrome.storage.sync.get("title", ({ title }) => {
-        document.getElementById("target12").textContent = title;
-    });
-});
 
 // sendEventBtn.addEventListener("click", async function () {
 //     chrome.runtime.sendMessage({ greeting: "hello" });
@@ -37,14 +25,6 @@ getTitleBtn.addEventListener("click", async function () {
 // });
 // ========== ========== ==========
 
-sendEventBtn.addEventListener("click", async function () {
-    console.log("response");
-    chrome.runtime.sendMessage({ data: "getData" }, function (response) {
-        console.log(response);
-        document.getElementById("target12").textContent = response?.result;
-    });
-});
-
 youtubeBtn.addEventListener("click", async function () {
     console.log("response");
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -54,7 +34,18 @@ youtubeBtn.addEventListener("click", async function () {
             (response) => {
                 document.getElementById("target12").textContent =
                     response?.data; // 웹페이지로부터 받은 데이터를 출력
+                document.querySelector("body").append("hello");
             }
         );
     });
+});
+
+copyBtn.addEventListener("click", async function () {
+    var copyInput = document.getElementById("target12");
+    try {
+        await navigator.clipboard.writeText(copyInput.innerText);
+        alert("텍스트가 복사되었습니다");
+    } catch (err) {
+        console.error("텍스트를 복사하는 데 실패했습니다.", err);
+    }
 });
