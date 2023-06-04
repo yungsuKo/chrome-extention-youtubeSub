@@ -1,11 +1,15 @@
 <html>
     <meta charset="utf-8" />
     <head> </head>
-    <body style="width: 300px">
+    <body style="width: 300px; height: 500px">
         <h1>Welcome!!</h1>
-        <button id="youtubeEvent">자막 추출</button>
-        <p id="target12">자막이 추출 위치</p>
-        <button id="copyBtn">복사</button>
+        <p id="script" style="max-height: 400px; overflow: scroll">
+            자막이 추출 위치
+        </p>
+        <div style="display: flex">
+            <button id="copyBtn" style="display: none">복사</button>
+            <button id="youtubeEvent">자막 추출</button>
+        </div>
         <script src="popup.js"></script>
     </body>
 </html>
