@@ -36,6 +36,7 @@ youtubeBtn.addEventListener("click", async function () {
             }
         );
     });
+    document.getElementById("copyBtn").style.display = "block";
 });
 
 copyBtn.addEventListener("click", async function () {
